@@ -106,6 +106,9 @@
     
     [self.navigationController.navigationBar configureFlatNavigationBarWithColor:[UIColor midnightBlueColor]];
     
+    self.flatSwitch.insetStyle = FUISwitchStyleSquare;
+    self.flatSwitch.insetFraction = 1;
+    self.flatSwitch.insetRadius = 2;
     self.flatSwitch.onColor = [UIColor turquoiseColor];
     self.flatSwitch.offColor = [UIColor cloudsColor];
     self.flatSwitch.onBackgroundColor = [UIColor midnightBlueColor];

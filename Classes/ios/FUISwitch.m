@@ -56,6 +56,12 @@
     self.onLabel = onLabel;
     [internalContainer addSubview:offLabel];
     [internalContainer addSubview:onLabel];
+    
+    // thumbView set default
+    self.insetFraction = .75;
+    self.insetStyle = FUISwitchStyleCircle;
+    self.insetRadius = 1;
+    
     UIView *thumbView = [[UIView alloc] init];
     [internalContainer addSubview:thumbView];
     self.thumbView = thumbView;
@@ -84,11 +90,15 @@
     CGFloat contentHeight = self.internalContainer.contentSize.height;
     
     //thumb image
-    CGFloat insetFraction = .75;
+    CGFloat insetFraction = self.insetFraction;
     CGFloat thumbEdgeSize = floorf(contentHeight * insetFraction);
     CGFloat thumbInset = (contentHeight - thumbEdgeSize) / 2;
     self.thumbView.frame = CGRectMake((self.internalContainer.contentSize.width - contentHeight) / 2 + thumbInset, thumbInset, thumbEdgeSize, thumbEdgeSize);
-    self.thumbView.layer.cornerRadius = thumbEdgeSize / 2;
+    if (self.insetStyle == FUISwitchStyleCircle) {
+        self.thumbView.layer.cornerRadius = thumbEdgeSize / 2;
+    } else {
+        self.thumbView.layer.cornerRadius = self.insetRadius;
+    }
     
     //labels
     CGRect left = CGRectMake(0, 0, (self.internalContainer.contentSize.width - self.thumbView.frame.size.width)/2, contentHeight);
