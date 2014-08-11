@@ -61,6 +61,8 @@
     self.insetFraction = .75;
     self.insetStyle = FUISwitchStyleCircle;
     self.insetRadius = 1;
+    // flickabel set default
+    self.flickable = YES;
     
     UIView *thumbView = [[UIView alloc] init];
     [internalContainer addSubview:thumbView];
@@ -140,25 +142,25 @@
 }
 
 - (void) panned:(UIPanGestureRecognizer *)gestureRecognizer {
-    
-    CGPoint translation = [gestureRecognizer translationInView:self.internalContainer];
-    [gestureRecognizer setTranslation:CGPointZero inView:self.internalContainer];
-    CGPoint newOffset = self.internalContainer.contentOffset;
-    newOffset.x -= translation.x;
-    CGFloat maxOffset = self.internalContainer.contentSize.width - self.frame.size.width;
-    newOffset.x = MAX(newOffset.x, 0);
-    newOffset.x = MIN(newOffset.x, maxOffset);
-    
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
-        gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+    if (self.flickable) {
+        CGPoint translation = [gestureRecognizer translationInView:self.internalContainer];
+        [gestureRecognizer setTranslation:CGPointZero inView:self.internalContainer];
+        CGPoint newOffset = self.internalContainer.contentOffset;
+        newOffset.x -= translation.x;
+        CGFloat maxOffset = self.internalContainer.contentSize.width - self.frame.size.width;
+        newOffset.x = MAX(newOffset.x, 0);
+        newOffset.x = MIN(newOffset.x, maxOffset);
         
-        [self setPercentOn:(1 - newOffset.x/maxOffset) animated:NO];
-        
-    } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        BOOL left = newOffset.x > maxOffset / 2;
-        [self setOn:(!left) animated:YES sendEvent:YES];
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan ||
+            gestureRecognizer.state == UIGestureRecognizerStateChanged) {
+            
+            [self setPercentOn:(1 - newOffset.x/maxOffset) animated:NO];
+            
+        } else if (gestureRecognizer.state == UIGestureRecognizerStateEnded) {
+            BOOL left = newOffset.x > maxOffset / 2;
+            [self setOn:(!left) animated:YES sendEvent:YES];
+        }
     }
-    
 }
 
 - (void) tapped:(UITapGestureRecognizer *)gestureRecognizer {
@@ -210,8 +212,10 @@
 }
 
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesBegan:touches withEvent:event];
-    [self setHighlighted:YES];
+    if (self.flickable) {
+        [super touchesBegan:touches withEvent:event];
+        [self setHighlighted:YES];
+    }
 }
 
 @end

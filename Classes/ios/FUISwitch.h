@@ -26,6 +26,7 @@ enum {
 @property(nonatomic, readwrite) CGFloat insetFraction;
 @property(nonatomic, readwrite) NSInteger insetStyle;
 @property(nonatomic, readwrite) CGFloat insetRadius; // enable insetStyle is square
+@property(nonatomic, readwrite) BOOL flickable;
 @property(weak, readwrite, nonatomic) UILabel *offLabel;
 @property(weak, readwrite, nonatomic) UILabel *onLabel;
 
